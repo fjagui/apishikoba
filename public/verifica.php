@@ -1,0 +1,21 @@
+<?php
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$id_token ='eyJhbGciOiJSUzI1NiIsImtpZCI6IjZiYzYzZTlmMThkNTYxYjM0ZjU2NjhmODhhZTI3ZDQ4ODc2ZDgwNzMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiOTgxNDg4MzI0MzkwLTA4ZTR0YzlqMm5yMGcwOWY2am9nN2hiYmE4YmRiOGdrLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiOTgxNDg4MzI0MzkwLTA4ZTR0YzlqMm5yMGcwOWY2am9nN2hiYmE4YmRiOGdrLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyOTM0Nzk0OTI5Mzg5MzI1MzQwIiwiaGQiOiJpZXNncmFuY2FwaXRhbi5vcmciLCJlbWFpbCI6ImxvdXZlbnRnY0BpZXNncmFuY2FwaXRhbi5vcmciLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IkhjS21OUmI3T1U4bTEwWkgyTm42X0EiLCJuYW1lIjoiTG91cmRlcyBWZW50dXJhIEZlcm7DoW5kZXoiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDUuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1wZlp1SGdlMGR3NC9BQUFBQUFBQUFBSS9BQUFBQUFBQUFBQS9BTVp1dWNsaDFvMjJTM1UwSl91dldGOGVFUTlWejJwMFV3L3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJMb3VyZGVzIiwiZmFtaWx5X25hbWUiOiJWZW50dXJhIEZlcm7DoW5kZXoiLCJsb2NhbGUiOiJlcyIsImlhdCI6MTU5ODAyMzAzMywiZXhwIjoxNTk4MDI2NjMzLCJqdGkiOiI3NzFkNzM5ZjYyZGQ2ZWFiMzk2NWIxNDg4M2Y4YWZkNTgxODEwYzI2In0.Z0v0YbmQe54TJVqTMWR8NYOU-AxkYbtPRVbzP0X86u5YecBChN2mrIFqpVw724_gZV_-JtHwmsbEGGizIgOvzkl1VvF75YunyIlyDuQSYRjBDBscyHyihkzK6SjAwKlHFyZ6wXSnEhm2GjQJnK0IpRd7LVY4KoHjHLfCJvDSXHT-Yf1TFORLlLrGcgIuuzCo8st9if3Hjpob286HQGYECJVU3QQVjoR-JDUCn4egwAjD7Woo4YA63ZhlyKvg5-BSu6aJcOIzs3Z0DwcnPCEhXbQqnRaPF4FipbE3W5q-7yNjrtxwGbnsKZEdnwX6HDy2Jxx12AUhLorDaBmEKVhpGA';
+
+$client = new Google_Client(['client_id' => '981488324390-08e4tc9j2nr0g09f6jog7hbba8bdb8gk.apps.googleusercontent.com']);  // Specify the CLIENT_ID of the app that accesses the backend
+$payload = $client->verifyIdToken($id_token);
+if ($payload) {
+    echo "Valid ID token";
+    $userid = $payload['sub'];
+    var_dump($payload);
+  // If request specified a G Suite domain:
+  //$domain = $payload['hd'];
+} else {
+  echo "Invalid ID token";
+}
+?>
