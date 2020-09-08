@@ -14,7 +14,10 @@ $containerBuilder->addDefinitions(__DIR__ . '/container.php');
 $container = $containerBuilder->build();
 
 // Create App instance
+
 $app = $container->get(App::class);
+
+//$app->getContainer()->get("db");
 //$headers = $app->request->headers;
 //print_r($headers);
 

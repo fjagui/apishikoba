@@ -41,7 +41,7 @@ final class ParteReader
         if (empty($parteId)) {
             throw new ValidationException('Parte ID required');
         }
-
+      
         $parte = $this->repository->getById($parteId);
         return $parte;
     }

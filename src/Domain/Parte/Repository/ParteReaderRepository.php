@@ -12,6 +12,7 @@ class ParteReaderRepository
      * @var Connection
      */
     private $connection;
+    private $baseSQL;
 
     /**
      * The constructor.
@@ -26,10 +27,21 @@ class ParteReaderRepository
     // Add your custom query methods here...
     public function getById(int $parteId): array    
     {
-    $row = $this->connection->table('partes')->find($parteId);
-    print_r($row);
- 
+       
+     //$row = $this->connection->table('partes')->find($parteId);
 
+     // raw se utiliza para escribir funciones dentro de las consultas.
+    $row = $this->connection->table('partes')
+        ->select('partes.*',
+             'profesores.apellido1 as Apellido1Profesor',
+             'profesores.apellido2 as Apellido2Profesor',
+             'profesores.nombre as NombreProfesor',
+             'alumno.apellido1 as Apellido1Alumno',
+             'alumno.apellido2 as Apellido2Alumno',
+             'alumno.nombre as NombreAlumno')
+        ->join('profesores','partes.idProfesor',"=",'profesores.id')
+        ->join('alumno','partes.idAlumno',"=",'alumno.id')
+        ->where('partes.id','=', $parteId)->get();
     if(!$row) {
         throw new \DomainException(sprintf('Parte not found: %s', $parteId));
     }       
@@ -39,7 +51,13 @@ class ParteReaderRepository
     
     public function getByIdProfesor(int $profesorId): array
     {
-        $rows = $this->connection->table('partes')->where('idProfesor','=',$profesorId)->get()->toArray();
+        $rows = $this->connection->table('partes')
+        ->select('partes.*',
+             'alumno.apellido1 as Apellido1Alumno',
+             'alumno.apellido2 as Apellido2Alumno',
+             'alumno.nombre as NombreAlumno')
+        ->join('alumno','partes.idAlumno',"=",'alumno.id')
+        ->where('partes.IdProfesor','=',$profesorId)->get()->toArray();
         return  $rows;
     }
 

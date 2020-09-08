@@ -49,7 +49,7 @@ final class ParteReadAction
      //   print_r($resultado);  
        
        $result= $this->parteReader->getParteById($parteId);
-       print_r($result);
+  
         // Transform the result into the JSON representation
        /*
         $result = [

@@ -47,7 +47,7 @@ final class PartesProfesorReadAction
      
      //   $resultado = $this->profesorReader->getAllProfesores();
      //   print_r($resultado);  
-       
+
        $result= $this->parteReader->getPartesByIdProfesor($profesorId);
        $partes = array();
        foreach($result as $objeto) {
