@@ -48,17 +48,30 @@ return [
     */
     Connection::class => function (ContainerInterface $container) {
         $factory = new ConnectionFactory(new IlluminateContainer());
-
         $connection = $factory->make($container->get('settings')['db']);
 
         // Disable the query log to prevent memory issues
         $connection->disableQueryLog();
+        //return $connection;
+        //Añadido para probar orm
+        $resolver = new \Illuminate\Database\ConnectionResolver();
+        $resolver->addConnection('default', $connection);
+        $resolver->setDefaultConnection('default');
+        \Illuminate\Database\Eloquent\Model::setConnectionResolver($resolver);
 
         return $connection;
+        
     },
 
     PDO::class => function (ContainerInterface $container) {
         return $container->get(Connection::class)->getPdo();
+    },
+    
+    GoogleClient::class => function (ContainerInterface $container) {
+
+        $client = new Google_Client(['client_id' => '981488324390-08e4tc9j2nr0g09f6jog7hbba8bdb8gk.apps.googleusercontent.com']);  // Specify the CLIENT_ID of the app that accesses the backend
+        return $client;
+
     },
 
 ];

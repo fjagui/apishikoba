@@ -47,26 +47,23 @@ final class PartesProfesorReadAction
      
      //   $resultado = $this->profesorReader->getAllProfesores();
      //   print_r($resultado);  
+     // print_r($request->getAttribute('id'));
 
-       $result= $this->parteReader->getPartesByIdProfesor($profesorId);
+
+       $idprofesor = $request->getAttribute('profesorId');
+       
+       
+       $result= $this->parteReader->getPartesByIdProfesor($idprofesor);
        $partes = array();
        foreach($result as $objeto) {
           $partes[] = (array) $objeto;
            }
        $result = $partes;
-           /*
-        $result = [
-            'id' => $profesorData->id,
-            'nombre' => $profesorData->nombre,
-            'apellido1' => $profesorData->apellido1,
-            'apellido2' => $profesorData->apellido2,
-            'telefono' => $profesorData->telefono,
-            'email' => $profesorData->email,
-            'idUsuario' => $profesorData->idUsuario,
-        ];*/
-
-        // Build the HTTP response
-        $response->getBody()->write((string)json_encode($result));
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+       $response->getBody()->write((string)json_encode($result));
+       return $response
+                  ->withHeader('Access-Control-Allow-Origin', 'http://localhost:4200')
+                  ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+                  ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
+                  ->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 }

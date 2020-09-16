@@ -2,6 +2,7 @@
 namespace App\Domain\Parte\Data;
 
 use App\Domain\Profesor\Data\ProfesorData;
+use App\Domain\Alumno\Data\AlumnoData;
 use Illuminate\Database\Eloquent\Model;
 class ParteData extends Model { 
   /**
@@ -15,8 +16,10 @@ class ParteData extends Model {
      * Get the profesor que puso el parte.
      */
     public function profesor()
-    {
-        return $this->belongsTo(ProfesorData::class);
+    {             
+              
+             
+        return $this->belongsTo(ProfesorData::class, 'idProfesor');
     }
 
   /**
@@ -24,6 +27,6 @@ class ParteData extends Model {
      */
     public function alumno()
     {
-        return $this->belongsTo(AlumnoData::class);
+        return $this->belongsTo(AlumnoData::class,'idAlumno');
     }
 }

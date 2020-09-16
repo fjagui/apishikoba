@@ -16,6 +16,6 @@ class ProfesorData extends Model {
     */
     public function partes()
     {
-        return $this->hasMany(ParteData::class, 'idProfesor');
+        return $this->hasMany(ParteData::class);
     }
 }

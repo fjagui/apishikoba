@@ -47,8 +47,8 @@ class UserCreatorRepository
                 email=:email;";
 
         $this->connection->prepare($sql)->execute($row);
-        print_r($user);
-        exit;
-       // return (int)$this->connection->lastInsertId();
+       // print_r($user);
+       // exit;
+       return (int)$this->connection->lastInsertId();
     }
 }

@@ -43,15 +43,29 @@ final class ProfesorReader
         }
 
         $profesor = $this->repository->getProfesorById($profesorId);
-        print_r($profesor);
+      
         return $profesor;
     }
+    
+    public function getProfesorByEmail(string $profesorEmail): array
+    {
+        // Validation
+        if (empty($profesorEmail)) {
+            throw new ValidationException('Profesor email required');
+        }
+        $profesor = $this->repository->getByEmail($profesorEmail);
+        return (array) $profesor;
+        
+    }
+
+
+
     public function getAllProfesores() {
         $profesores = $this->repository->getAll();
         return $profesores;
     }
 
-
+    
 
 
 }

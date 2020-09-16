@@ -24,14 +24,18 @@ class ParteReaderRepository
         $this->connection = $connection;
     }
 
-    // Add your custom query methods here...
+    /* Devuelve parte por Id
+     */
     public function getById(int $parteId): array    
     {
        
      //$row = $this->connection->table('partes')->find($parteId);
 
-     // raw se utiliza para escribir funciones dentro de las consultas.
-    $row = $this->connection->table('partes')
+     
+    $row = ParteData::find($parteId)->toArray();
+    $row['idProfesor'] = ParteData::find($parteId)->profesor->toArray();
+    /*// raw se utiliza para escribir funciones dentro de las consultas.
+    $rows = $this->connection->table('partes')
         ->select('partes.*',
              'profesores.apellido1 as Apellido1Profesor',
              'profesores.apellido2 as Apellido2Profesor',
@@ -41,24 +45,35 @@ class ParteReaderRepository
              'alumno.nombre as NombreAlumno')
         ->join('profesores','partes.idProfesor',"=",'profesores.id')
         ->join('alumno','partes.idAlumno',"=",'alumno.id')
-        ->where('partes.id','=', $parteId)->get();
+        ->where('partes.id','=', $parteId)->get();*/
     if(!$row) {
         throw new \DomainException(sprintf('Parte not found: %s', $parteId));
     }       
 
     return (array) $row;
     }
-    
+
+    /**
+     * Partes puestos por un profesor.
+     *
+     * @param int $profesorID The user
+     *
+     * @return array array con los partes puestos por el profesor.
+     */
     public function getByIdProfesor(int $profesorId): array
     {
-        $rows = $this->connection->table('partes')
-        ->select('partes.*',
-             'alumno.apellido1 as Apellido1Alumno',
-             'alumno.apellido2 as Apellido2Alumno',
-             'alumno.nombre as NombreAlumno')
-        ->join('alumno','partes.idAlumno',"=",'alumno.id')
-        ->where('partes.IdProfesor','=',$profesorId)->get()->toArray();
-        return  $rows;
+        //Cargamos los partes del profesor
+        $partes = ParteData::where('idProfesor','=',$profesorId)->get()->toArray();
+        //Array para devolver que incluirá los datos del  alumno 
+        $resultado= [];
+        //Recorremos los partes y cargamos datos del alumno.
+        foreach ($partes as $valor) {
+            $parteId = $valor['id'];
+            $valor['idAlumno']=ParteData::find($parteId)->alumno->toArray();
+            $resultado[] = $valor;
+        }
+
+        return (array) $resultado;
     }
 
 }

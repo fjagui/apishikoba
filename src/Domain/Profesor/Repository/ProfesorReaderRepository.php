@@ -24,17 +24,28 @@ class ProfesorReaderRepository
     }
 
     // Add your custom query methods here...
+
     public function getProfesorById(int $profesorId): array
-{
+    {
     $row = $this->connection->table('profesores')->find($profesorId);
-    print_r($row);
-    
     if(!$row) {
         throw new \DomainException(sprintf('Profesor not found: %s', $profesorId));
     }       
 
     return (array) $row;
-}
+    }
+
+    public function getByEmail(string $profesorEmail): array
+    {
+    $row = ProfesorData::where('email','=',$profesorEmail)->get()->toArray();
+    //$row = $this->connection->table('profesores')->where('email','=', $profesorEmail)->toArray();
+ 
+    if(!$row) {
+        throw new \DomainException(sprintf('Profesor not found: %s', $profesorEmail));
+    }       
+    return (array) $row;
+    }
+
     public function getAll()
     {
         $rows = $this->connection->table('profesores')->get();

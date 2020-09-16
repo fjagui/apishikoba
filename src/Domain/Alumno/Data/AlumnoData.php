@@ -9,13 +9,13 @@ class AlumnoData extends Model {
     *
     * @var string
     */ 
-  protected $table = 'alumnos';
+  protected $table = 'alumno';
 
   /**
     * Get partes del profesor.
     */
     public function partes()
     {
-        return $this->hasMany(ParteData::class, 'idAlumno');
+        return $this->hasMany(ParteData::class);
     }
 }
