@@ -13,6 +13,8 @@ use App\Domain\Profesor\Service\ProfesorReader as ProfesorReader;
 use Illuminate\Database\Connection;
 use App\Slim;
 use Google_Client;
+use Google_Service;
+use Google_Service_Oauth2;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\Config;
 class AuthMiddleware 
 {
     private $client;
+    private $authService;
     private $connection;
     private $profesorReader;
    
@@ -40,6 +43,7 @@ class AuthMiddleware
        $this->container = $container;
        $this->connection = $this->container->get(Connection::class);
        $this->client = new Google_Client(['client_id' => '981488324390-08e4tc9j2nr0g09f6jog7hbba8bdb8gk.apps.googleusercontent.com']);  // Specify the CLIENT_ID of the app that accesses the backend
+       
        $repositorio = new ProfesorReaderRepository($this->connection);
        $this->profesorReader = new ProfesorReader($repositorio);
 
@@ -59,14 +63,15 @@ class AuthMiddleware
         
         //Comprobamos si hay token en la petición.
         $header = $request->getHeaders('Authorization');
+      
         foreach ($header as $valor){
            if (strpos($valor[0], 'Bearer')!==false) {
                 $token = explode(" ",$valor[0]);
                 $existeToken = true;
                 }
         }
-       /*  Este es el comentrio que hay que quitar 
-           para que vuelva a funcionar el control del token
+
+
        if (!($existeToken)) {
            $data = [
             "status" => 1100,
@@ -79,10 +84,14 @@ class AuthMiddleware
                      ->withHeader('Content-Type', 'application/json');
                      
         }
-        
-        $id_token = $token[1];
-        $payload = $this->client->verifyIdToken($id_token);
-      
+          
+        $id_token1 = $token[1];
+//comprobación de 
+$fichero = "token.txt";
+file_put_contents($fichero,$id_token1);
+
+//fin comprobación
+        $payload = $this->client->verifyIdToken($id_token1);
         if (!$payload) {
             $data = [
                 "status" => 1100,
@@ -94,12 +103,15 @@ class AuthMiddleware
                 return $response
                          ->withHeader('Content-Type', 'application/json');
         }
+
+     
         //Si se ha verificado el token en payload se cargan los datos.
+       
         $userid = $payload['sub'];
         $email = $payload['email'];
         $domain = $payload['hd'];
-        */
-        $email = "joseaguilera@iesgrancapitan.org";
+    
+       
         $result= $this->profesorReader->getProfesorByEmail($email)[0];
         $request = $request->withAttribute('profesorId',$result['id']);
         $response = $handler->handle($request);
